@@ -34,8 +34,8 @@ type FileLine struct {
 	Line int
 }
 
-func NewFileLine() error {
-	_, file, line, _ := runtime.Caller(1)
+func NewFileLine(skip int) error {
+	_, file, line, _ := runtime.Caller(skip)
 	return FileLine{
 		File: file,
 		Line: line,
