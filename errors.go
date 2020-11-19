@@ -1,6 +1,9 @@
 package util
 
-import "fmt"
+import (
+	"fmt"
+	"runtime"
+)
 
 func Catch(errFuncs ...func() error) error {
 	for _, fn := range errFuncs {
@@ -24,4 +27,21 @@ func DeferMultiErrors(err *error, errFunc func() error) {
 	if _err := errFunc(); _err != nil {
 		*err = MultiErrors(*err, _err)
 	}
+}
+
+type FileLine struct {
+	File string
+	Line int
+}
+
+func NewFileLine() error {
+	_, file, line, _ := runtime.Caller(1)
+	return FileLine{
+		File: file,
+		Line: line,
+	}
+}
+
+func (e FileLine) Error() string {
+	return fmt.Sprintf("[%s:%d]", e.File, e.Line)
 }
